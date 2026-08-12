@@ -513,6 +513,7 @@
 </div>
 
 <!-- ⑤ 玄空飛星分析 -->
+{% if xuankong_lead or xuankong_rows %}
 <div class="section">
   <div class="section-title"><span class="num">{{ section_numbers.xuankong }}</span>玄空飛星分析</div>
   <p class="lead">{{ xuankong_lead }}</p>
@@ -537,6 +538,7 @@
     {% endfor %}
   </table>
 </div>
+{% endif %}
 
 <!-- ⑥ 写真・間取り図から見る室内の気の流れ -->
 {% if room_energy_photos %}
