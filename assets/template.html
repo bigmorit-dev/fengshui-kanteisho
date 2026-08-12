@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page {
+    size: A4;
+    margin: 20mm 18mm 24mm 18mm;
+    @bottom-center {
+      content: counter(page);
+      font-family: "Noto Sans CJK JP";
+      font-size: 9pt;
+      color: #8a7f68;
+    }
+  }
+  @page cover {
+    margin: 0;
+    @bottom-center { content: none; }
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: "Noto Sans CJK JP", sans-serif;
+    color: #2E2A24;
+    font-size: 11pt;
+    line-height: 1.8;
+  }
+
+  h1, h2, h3, .mincho {
+    font-family: "Noto Serif CJK JP", serif;
+  }
+
+  /* ---------- 表紙 ---------- */
+  .cover {
+    page: cover;
+    page-break-after: always;
+    width: 100%;
+    height: 297mm;
+    background: #FBF9F3;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .cover .vine-frame {
+    position: absolute;
+    top: 12mm; left: 12mm; right: 12mm; bottom: 12mm;
+    border: 1px solid #C9A66B;
+    opacity: 0.55;
+  }
+  .cover .vine-frame-inner {
+    position: absolute;
+    top: 15mm; left: 15mm; right: 15mm; bottom: 15mm;
+    border: 1px solid #C9A66B;
+    opacity: 0.3;
+  }
+  .cover .kicker {
+    letter-spacing: 0.3em;
+    color: #5B7C9D;
+    font-size: 10pt;
+    margin-bottom: 10mm;
+  }
+  .cover .title {
+    font-size: 30pt;
+    color: #3E5A76;
+    font-weight: 700;
+    margin-bottom: 6mm;
+  }
+  .cover .subtitle {
+    font-size: 12pt;
+    color: #5B7C9D;
+    margin-bottom: 30mm;
+  }
+  .cover .client {
+    font-size: 15pt;
+    margin-bottom: 4mm;
+  }
+  .cover .meta {
+    font-size: 10pt;
+    color: #6b6154;
+    margin-top: 20mm;
+  }
+  .cover .meta div { margin-bottom: 2mm; }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 5mm 0 0;
+  }
+  .toc-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 3mm;
+    padding: 2.5mm 0;
+    border-bottom: 1px dotted #D8CBB0;
+    font-size: 10.5pt;
+  }
+  .toc-list .toc-num {
+    color: #C9A66B;
+    font-family: "Noto Serif CJK JP", serif;
+    width: 6mm;
+    flex-shrink: 0;
+  }
+  .toc-list .toc-title { color: #3E5A76; }
+
+  /* ---------- 九宮コンパス ---------- */
+  .compass-diagram {
+    display: grid;
+    grid-template-columns: repeat(3, 11mm);
+    grid-template-rows: repeat(3, 11mm);
+    gap: 1mm;
+    margin: 3mm 0 4mm;
+    flex-shrink: 0;
+    width: 35mm;
+  }
+  .compass-diagram .cell {
+    border: 1px solid #EDE6D6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8pt;
+    color: #8a7f68;
+    border-radius: 1mm;
+    background: #FBF9F3;
+  }
+  .compass-diagram .cell.highlight-single {
+    background: #5B7C9D; color: #fff; border-color: #5B7C9D; font-weight: 600;
+  }
+  .compass-diagram .cell.highlight-good {
+    background: rgba(91,124,157,0.22); color: #3E5A76; border-color: #5B7C9D; font-weight: 600;
+  }
+  .compass-diagram .cell.highlight-bad {
+    background: rgba(180,105,90,0.22); color: #8a4438; border-color: #B4695A; font-weight: 600;
+  }
+  .compass-legend {
+    display: flex; gap: 6mm; font-size: 9pt; color: #6b6154; margin-bottom: 2mm;
+  }
+  .compass-legend .dot {
+    display: inline-block; width: 3mm; height: 3mm; border-radius: 1mm;
+    margin-right: 1.5mm; vertical-align: middle;
+  }
+  .compass-legend .dot.good { background: #5B7C9D; }
+  .compass-legend .dot.bad { background: #B4695A; }
+
+  /* ---------- 飛星図グリッド ---------- */
+  .stars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 22mm);
+    gap: 2mm;
+    margin: 5mm 0;
+  }
+  .star-cell {
+    border: 1px solid #EDE6D6;
+    border-radius: 2mm;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2mm;
+    background: #FBF9F3;
+  }
+  .star-cell-label {
+    font-family: "Noto Serif CJK JP", serif;
+    font-size: 10pt;
+    color: #6b6154;
+    margin-bottom: 1.5mm;
+  }
+  .star-cell-stars { font-size: 8.5pt; color: #4a453b; line-height: 1.4; }
+  .star-cell.fortune-good { background: rgba(91,124,157,0.10); border-color: #5B7C9D; }
+  .star-cell.fortune-good .star-cell-label { color: #3E5A76; }
+  .star-cell.fortune-bad { background: rgba(180,105,90,0.10); border-color: #B4695A; }
+  .star-cell.fortune-bad .star-cell-label { color: #8a4438; }
+
+  /* ---------- 要素・部屋カード（巒頭／お部屋共通） ---------- */
+  .room-block {
+    border: 1px solid #EDE6D6;
+    border-radius: 3mm;
+    padding: 5mm 6mm;
+    margin-bottom: 4mm;
+    page-break-inside: avoid;
+    display: flex;
+    gap: 6mm;
+    align-items: flex-start;
+  }
+  .room-block .room-text { flex: 1; min-width: 0; }
+  .room-block .room-head {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 2mm;
+  }
+  .room-block .room-name {
+    font-family: "Noto Serif CJK JP", serif; font-size: 13.5pt; color: #3E5A76;
+  }
+  .room-block .room-tag {
+    font-size: 9.5pt; padding: 1mm 3mm; border-radius: 999px; background: #EDE6D6; color: #6b6154;
+  }
+  .room-block .room-direction { font-size: 9.5pt; color: #C9A66B; margin-bottom: 2mm; }
+  .room-block .role-note {
+    font-size: 10pt; color: #6b6154; background: #FBF9F3; border-radius: 2mm;
+    padding: 3mm 4mm; margin-bottom: 3mm;
+  }
+  .room-block p { margin: 0; font-size: 10.5pt; color: #4a453b; }
+
+  /* ---------- 家族ブロック ---------- */
+  .family-block {
+    border-left: 3px solid #C9A66B;
+    padding: 4mm 0 4mm 6mm;
+    margin-bottom: 6mm;
+    page-break-inside: avoid;
+    display: flex;
+    gap: 6mm;
+    align-items: flex-start;
+  }
+  .family-block .family-text { flex: 1; min-width: 0; }
+  .family-block .relation {
+    font-family: "Noto Serif CJK JP", serif; font-size: 14pt; color: #3E5A76; margin-bottom: 1mm;
+  }
+  .family-block .meta-line { font-size: 9.5pt; color: #8a7f68; margin-bottom: 2mm; }
+  .family-block p { margin: 0 0 2mm; font-size: 10.5pt; color: #4a453b; }
+
+  /* ---------- 本文共通 ---------- */
+  .section {
+    page-break-inside: avoid;
+    margin-bottom: 12mm;
+  }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 4mm;
+    font-size: 15pt;
+    color: #3E5A76;
+    border-top: 1px solid #D8CBB0;
+    padding-top: 4mm;
+    margin-bottom: 5mm;
+  }
+  .section-title .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 8mm; height: 8mm;
+    border-radius: 50%;
+    border: 1px solid #5B7C9D;
+    color: #5B7C9D;
+    font-size: 11pt;
+    flex-shrink: 0;
+  }
+
+  .lead {
+    color: #4a453b;
+    margin-bottom: 4mm;
+  }
+
+  table.elements {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 4mm 0;
+    font-size: 10pt;
+  }
+  table.elements th {
+    text-align: left;
+    color: #5B7C9D;
+    font-weight: 600;
+    border-bottom: 1px solid #D8CBB0;
+    padding: 2mm 3mm;
+    white-space: nowrap;
+  }
+  table.elements td {
+    padding: 2.5mm 3mm;
+    border-bottom: 1px solid #EDE6D6;
+    vertical-align: top;
+  }
+  table.elements td:first-child,
+  table.elements th:first-child {
+    white-space: nowrap;
+    width: 1%;
+  }
+  table.elements td:nth-child(2),
+  table.elements th:nth-child(2) {
+    white-space: nowrap;
+    width: 1%;
+  }
+
+  .callout {
+    background: rgba(91,124,157,0.08);
+    border-left: 4px solid #5B7C9D;
+    padding: 4mm 5mm;
+    margin: 5mm 0;
+    font-size: 10.5pt;
+  }
+  .callout .callout-label {
+    font-size: 9pt;
+    color: #5B7C9D;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5mm;
+  }
+
+  .diagram-wrap {
+    text-align: center;
+    margin: 4mm 0;
+  }
+
+  /* ---------- スコアバー ---------- */
+  .score-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4mm;
+    font-size: 10.5pt;
+  }
+  .score-label {
+    width: 28mm;
+    flex-shrink: 0;
+    color: #3E5A76;
+  }
+  .score-bar-bg {
+    flex: 1;
+    height: 4mm;
+    background: #EDE6D6;
+    border-radius: 2mm;
+    overflow: hidden;
+    margin: 0 3mm;
+  }
+  .score-bar-fill {
+    height: 100%;
+    background: #5B7C9D;
+    border-radius: 2mm;
+  }
+  .score-value {
+    width: 10mm;
+    text-align: right;
+    color: #6b6154;
+  }
+
+  /* ---------- 開運プラン ---------- */
+  .action-item {
+    display: flex;
+    gap: 3mm;
+    margin-bottom: 4mm;
+    align-items: baseline;
+  }
+  .action-priority {
+    color: #C9A66B;
+    font-family: "Noto Serif CJK JP", serif;
+    font-size: 10pt;
+    flex-shrink: 0;
+    width: 18mm;
+    white-space: nowrap;
+  }
+
+  .closing {
+    text-align: center;
+    margin-top: 14mm;
+    padding-top: 6mm;
+    border-top: 1px solid #D8CBB0;
+    color: #5B7C9D;
+    font-size: 10.5pt;
+    page-break-inside: avoid;
+  }
+  .closing .maxim {
+    font-family: "Noto Serif CJK JP", serif;
+    font-size: 12pt;
+    color: #3E5A76;
+    margin-bottom: 3mm;
+  }
+</style>
+</head>
+<body>
+
+{% macro compass(compass_map) %}
+<div class="compass-diagram">
+  {% for key, label in [('nw','北西'),('n','北'),('ne','北東'),('w','西'),('c','中央'),('e','東'),('sw','南西'),('s','南'),('se','南東')] %}
+  <div class="cell {% if compass_map.get(key) %}highlight-{{ compass_map.get(key) }}{% endif %}">{{ label }}</div>
+  {% endfor %}
+</div>
+{% endmacro %}
+
+{% macro stars_grid(grid_map) %}
+<div class="stars-grid">
+  {% for key, label in [('nw','北西'),('n','北'),('ne','北東'),('w','西'),('c','中央'),('e','東'),('sw','南西'),('s','南'),('se','南東')] %}
+  {% set cell = grid_map.get(key) %}
+  <div class="star-cell {% if cell %}{% if cell.fortune == '吉' %}fortune-good{% elif cell.fortune in ['凶','要注意','要改善'] %}fortune-bad{% endif %}{% endif %}">
+    <div class="star-cell-label">{{ label }}</div>
+    {% if cell %}<div class="star-cell-stars">{{ cell.stars }}</div>{% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endmacro %}
+
+<!-- 表紙 -->
+<div class="cover">
+  <div class="vine-frame"></div>
+  <div class="vine-frame-inner"></div>
+  <div class="kicker">地 理 風 水 鑑 定 書</div>
+  <div class="title">{{ report_title }}</div>
+  <div class="subtitle">現地調査に基づく総合鑑定</div>
+  <div class="client">{{ client_name }} 様</div>
+  <div class="meta">
+    <div>鑑定日：{{ report_date }}</div>
+    <div>{{ property_label }}</div>
+    <div>鑑定士：{{ practitioner_name }}</div>
+  </div>
+</div>
+
+<!-- ② 鑑定概要 -->
+<div class="section">
+  <div class="section-title"><span class="num">{{ section_numbers.greeting }}</span>鑑定概要</div>
+  <p class="lead">{{ overview_text }}</p>
+  {% if toc_items %}
+  <div class="callout">
+    <div class="callout-label">この鑑定書でお伝えする内容</div>
+    <ul class="toc-list">
+      {% for item in toc_items %}
+      <li><span class="toc-num">{{ item.number }}</span><span class="toc-title">{{ item.title }}</span></li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+</div>
+
+<!-- ③ 巒頭分析 -->
+<div class="section">
+  <div class="section-title"><span class="num">{{ section_numbers.luantou }}</span>巒頭（形勢）分析</div>
+  <p class="lead">{{ luantou_lead }}</p>
+  {% for row in luantou_rows %}
+  <div class="room-block">
+    <div class="room-text">
+      <div class="room-head">
+        <span class="room-name">{{ row.element }}</span>
+        <span class="room-tag">{{ row.status }}</span>
+      </div>
+      {% if row.role_note %}<div class="role-note">{{ row.role_note }}</div>{% endif %}
+      <p>{{ row.meaning }}</p>
+    </div>
+    {% if row.compass_map %}{{ compass(row.compass_map) }}{% endif %}
+  </div>
+  {% endfor %}
+  {% if luantou_note %}
+  <div class="callout">
+    <div class="callout-label">POINT</div>
+    {{ luantou_note }}
+  </div>
+  {% endif %}
+</div>
+
+<!-- お部屋ごとの方位鑑定（現地調査でお部屋ごとの記録がある場合） -->
+{% if rooms %}
+<div class="section">
+  <div class="section-title"><span class="num">{{ section_numbers.rooms }}</span>お部屋ごとの方位鑑定</div>
+  {% for room in rooms %}
+  <div class="room-block">
+    <div class="room-text">
+      <div class="room-head">
+        <span class="room-name">{{ room.name }}</span>
+        <span class="room-tag">{{ room.fortune }}</span>
+      </div>
+      <div class="room-direction">方角：{{ room.direction }}</div>
+      {% if room.role_note %}<div class="role-note">{{ room.role_note }}</div>{% endif %}
+      <p>{{ room.commentary }}</p>
+    </div>
+    {% if room.compass_map %}{{ compass(room.compass_map) }}{% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- ④ 玄空飛星分析 -->
+<div class="section">
+  <div class="section-title"><span class="num">{{ section_numbers.xuankong }}</span>玄空飛星分析</div>
+  <p class="lead">{{ xuankong_lead }}</p>
+  {% if facing and sitting %}
+  <div class="callout">
+    <div class="callout-label">座向きについて</div>
+    この鑑定では、玄関ドアが外を向いている方角（{{ facing }}）を「向」、その正反対（{{ sitting }}）を「座」として算出しています。玄関の壁面の位置ではなく、ドアが実際に開く向きを基準にするのが正しい座向きの考え方です。
+  </div>
+  {% endif %}
+  {% if era_note %}<div class="callout"><div class="callout-label">現在の元運について</div>{{ era_note }}</div>{% endif %}
+  {% if xuankong_grid %}{{ stars_grid(xuankong_grid) }}{% endif %}
+  <table class="elements">
+    <tr><th>方位</th><th>山星/向星/運星</th><th>吉凶</th></tr>
+    {% for row in xuankong_rows %}
+    <tr><td>{{ row.direction }}</td><td>{{ row.stars }}</td><td>{{ row.fortune }}</td></tr>
+    {% endfor %}
+  </table>
+</div>
+
+<!-- ⑤ 八宅法分析 -->
+<div class="section">
+  <div class="section-title"><span class="num">{{ section_numbers.bazhai }}</span>八宅法分析</div>
+  <p class="lead">{{ bazhai_lead }}</p>
+  {% if bazhai_compass_map %}
+  <div class="compass-legend">
+    <span><span class="dot good"></span>吉方位</span>
+    <span><span class="dot bad"></span>凶方位</span>
+  </div>
+  {{ compass(bazhai_compass_map) }}
+  {% endif %}
+  <table class="elements">
+    <tr><th>種別</th><th>方位</th><th>意味</th></tr>
+    {% for row in bazhai_rows %}
+    <tr><td>{{ row.kind }}</td><td>{{ row.direction }}</td><td>{{ row.meaning }}</td></tr>
+    {% endfor %}
+  </table>
+</div>
+
+<!-- ご家族の方位鑑定（家族分のデータがある場合） -->
+{% if family_members %}
+<div class="section">
+  <div class="section-title"><span class="num">{{ section_numbers.family }}</span>ご家族の方位鑑定</div>
+  {% for f in family_members %}
+  <div class="family-block">
+    <div class="family-text">
+      <div class="relation">{{ f.relation }}</div>
+      <div class="meta-line">生年月日：{{ f.birthdate }} ／ 命卦：{{ f.life_gua }}</div>
+      <div class="compass-legend">
+        <span><span class="dot good"></span>吉方位</span>
+        <span><span class="dot bad"></span>凶方位</span>
+      </div>
+      {{ compass(f.compass_map) }}
+    </div>
+    <div class="family-text">
+      <p><strong>吉方位：</strong>{{ f.good_directions }}</p>
+      <p><strong>凶方位：</strong>{{ f.bad_directions }}</p>
+      <p>{{ f.note }}</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- ⑥ 総合エネルギーバランス -->
+<div class="section">
+  <div class="section-title"><span class="num">{{ section_numbers.scores }}</span>総合エネルギーバランス</div>
+  {% for s in scores %}
+  <div class="score-row">
+    <div class="score-label">{{ s.label }}</div>
+    <div class="score-bar-bg"><div class="score-bar-fill" style="width: {{ s.value }}%;"></div></div>
+    <div class="score-value">{{ s.value }}</div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- ⑦ 開運行動プラン -->
+<div class="section">
+  <div class="section-title"><span class="num">{{ section_numbers.actions }}</span>開運行動プラン</div>
+  {% for a in actions %}
+  <div class="action-item">
+    <div class="action-priority">優先度{{ a.priority }}</div>
+    <div>{{ a.text }}</div>
+  </div>
+  {% endfor %}
+  {% if key_message %}
+  <div class="callout">
+    <div class="callout-label">最も大切なメッセージ</div>
+    {{ key_message }}
+  </div>
+  {% endif %}
+</div>
+
+<!-- ⑧ まとめ -->
+<div class="closing">
+  <div class="maxim">{{ maxim }}</div>
+  <div>{{ closing_text }}</div>
+</div>
+
+</body>
+</html>

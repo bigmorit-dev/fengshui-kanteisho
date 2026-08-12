@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>地理風水 ネット鑑定 お申し込みフォーム</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#FBF9F3;
+    --blue:#5B7C9D;
+    --blue-deep:#3E5A76;
+    --gold:#C9A66B;
+    --terracotta:#B4695A;
+    --ink:#2E2A24;
+    --ink-soft:#6b6154;
+    --line:#D8CBB0;
+    --line-soft:#EDE6D6;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--ivory);
+    color:var(--ink);
+    font-family:"Noto Sans JP",sans-serif;
+    line-height:1.8;
+  }
+  h1,h2,h3,.mincho{font-family:"Noto Serif JP",serif;}
+
+  /* ---------- ヘッダー ---------- */
+  .page-header{
+    text-align:center;
+    padding:48px 20px 28px;
+    position:relative;
+  }
+  .page-header .kicker{
+    letter-spacing:.35em;
+    color:var(--blue);
+    font-size:11px;
+    margin-bottom:14px;
+  }
+  .page-header h1{
+    font-size:26px;
+    color:var(--blue-deep);
+    margin:0 0 10px;
+    font-weight:700;
+  }
+  .page-header p{
+    color:var(--ink-soft);
+    font-size:13px;
+    max-width:480px;
+    margin:0 auto;
+  }
+
+  /* ---------- ステッパー ---------- */
+  .stepper{
+    display:flex;
+    justify-content:center;
+    gap:6px;
+    padding:0 16px 8px;
+    flex-wrap:wrap;
+    max-width:720px;
+    margin:0 auto;
+  }
+  .step-dot{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:11px;
+    color:var(--ink-soft);
+    padding:6px 10px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:#fff;
+    white-space:nowrap;
+  }
+  .step-dot .num{
+    width:16px;height:16px;
+    border-radius:50%;
+    background:var(--line-soft);
+    color:var(--ink-soft);
+    font-size:9px;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .step-dot.active{
+    border-color:var(--blue);
+    color:var(--blue-deep);
+    background:rgba(91,124,157,0.08);
+  }
+  .step-dot.active .num{background:var(--blue);color:#fff;}
+  .step-dot.done .num{background:var(--gold);color:#fff;}
+
+  /* ---------- フォームカード ---------- */
+  .wrap{max-width:640px;margin:0 auto;padding:24px 16px 80px;}
+  .card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:36px 30px;
+    position:relative;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"";
+    position:absolute;
+    top:10px;left:10px;right:10px;bottom:10px;
+    border:1px solid var(--gold);
+    opacity:.25;
+    pointer-events:none;
+    border-radius:3px;
+  }
+  .step-panel{display:none;}
+  .step-panel.active{display:block;animation:fadein .25s ease;}
+  @keyframes fadein{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .step-title{
+    display:flex;align-items:center;gap:10px;
+    font-size:18px;color:var(--blue-deep);
+    border-bottom:1px solid var(--line);
+    padding-bottom:14px;
+    margin-bottom:22px;
+  }
+  .step-title .num{
+    width:26px;height:26px;border-radius:50%;
+    border:1px solid var(--blue);color:var(--blue);
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;flex-shrink:0;
+  }
+  .step-desc{
+    font-size:12.5px;color:var(--ink-soft);
+    margin:-14px 0 20px;
+  }
+
+  .field{margin-bottom:20px;}
+  .field label{
+    display:block;
+    font-size:13px;
+    color:var(--blue-deep);
+    margin-bottom:6px;
+    font-weight:500;
+  }
+  .field label .req{color:var(--terracotta);font-size:11px;margin-left:4px;}
+  .field label .opt{color:var(--ink-soft);font-size:11px;margin-left:4px;font-weight:400;}
+  .hint{font-size:11.5px;color:var(--ink-soft);margin-top:5px;}
+
+  input[type=text], input[type=email], input[type=date], input[type=number], select, textarea{
+    width:100%;
+    padding:10px 12px;
+    border:1px solid var(--line);
+    border-radius:4px;
+    font-family:inherit;
+    font-size:14px;
+    color:var(--ink);
+    background:var(--ivory);
+  }
+  input:focus, select:focus, textarea:focus{
+    outline:none;
+    border-color:var(--blue);
+    background:#fff;
+  }
+  textarea{resize:vertical;min-height:80px;}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:520px){.grid2{grid-template-columns:1fr;}}
+
+  .chip-group{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    padding:8px 14px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    font-size:13px;
+    cursor:pointer;
+    background:#fff;
+    color:var(--ink);
+    user-select:none;
+  }
+  .chip input{display:none;}
+  .chip.selected{
+    background:var(--blue);
+    border-color:var(--blue);
+    color:#fff;
+  }
+
+  /* 方位コンパス */
+  .compass{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:6px;
+    max-width:360px;
+  }
+  .compass .chip{text-align:center;padding:9px 4px;}
+
+  .radio-row{display:flex;gap:16px;flex-wrap:wrap;}
+  .radio-row label{
+    display:flex;align-items:center;gap:6px;
+    font-size:13px;color:var(--ink);
+    font-weight:400;
+    margin:0;
+  }
+  .radio-row input{width:auto;}
+
+  .upload-box{
+    border:1.5px dashed var(--line);
+    border-radius:6px;
+    padding:20px;
+    text-align:center;
+    background:var(--ivory);
+    cursor:pointer;
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+  .upload-box.has-file{border-color:var(--blue);color:var(--blue-deep);}
+  .upload-box input{display:none;}
+
+  /* 家族追加リスト */
+  .family-item{
+    display:grid;
+    grid-template-columns:1fr 1fr auto;
+    gap:8px;
+    margin-bottom:10px;
+    align-items:center;
+  }
+  @media (max-width:520px){.family-item{grid-template-columns:1fr;}}
+  .remove-btn{
+    background:none;border:1px solid var(--line);color:var(--terracotta);
+    border-radius:4px;padding:8px 10px;font-size:12px;cursor:pointer;
+  }
+  .add-btn{
+    background:none;
+    border:1px dashed var(--blue);
+    color:var(--blue-deep);
+    border-radius:4px;
+    padding:9px 14px;
+    font-size:12.5px;
+    cursor:pointer;
+    width:100%;
+  }
+
+  .callout{
+    background:rgba(91,124,157,0.08);
+    border-left:3px solid var(--blue);
+    padding:12px 14px;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin-bottom:20px;
+    border-radius:0 4px 4px 0;
+  }
+
+  .nav-row{
+    display:flex;justify-content:space-between;
+    margin-top:28px;
+    padding-top:20px;
+    border-top:1px solid var(--line-soft);
+  }
+  button.nav-btn{
+    font-family:inherit;
+    font-size:13.5px;
+    padding:11px 26px;
+    border-radius:4px;
+    cursor:pointer;
+    border:1px solid var(--blue);
+    background:#fff;
+    color:var(--blue-deep);
+  }
+  button.nav-btn.primary{
+    background:var(--blue);
+    color:#fff;
+  }
+  button.nav-btn:disabled{opacity:.35;cursor:default;}
+  button.nav-btn.invisible{visibility:hidden;}
+
+  /* 確認画面 */
+  .summary-block{margin-bottom:18px;}
+  .summary-block h4{
+    font-size:12px;color:var(--blue);letter-spacing:.05em;
+    margin:0 0 8px;
+    border-bottom:1px solid var(--line-soft);
+    padding-bottom:6px;
+  }
+  .summary-row{display:flex;font-size:13px;margin-bottom:5px;}
+  .summary-row .k{width:130px;flex-shrink:0;color:var(--ink-soft);}
+  .summary-row .v{color:var(--ink);}
+
+  .consent{display:flex;gap:10px;align-items:flex-start;margin:20px 0;font-size:12.5px;color:var(--ink-soft);}
+  .consent input{margin-top:3px;}
+
+  .done-screen{text-align:center;padding:40px 10px;}
+  .done-screen .mincho{font-size:20px;color:var(--blue-deep);margin-bottom:10px;}
+  .done-screen p{font-size:13px;color:var(--ink-soft);}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="kicker">WEB DIAGNOSIS ENTRY FORM — TYPE A</div>
+  <h1>地理風水 ネット鑑定 お申し込みフォーム</h1>
+  <p>ご自宅の情報をできるだけ詳しくご入力いただくことで、より精度の高い鑑定をお届けします。所要時間の目安は約8〜10分です。</p>
+</div>
+
+<div class="stepper" id="stepper"></div>
+
+<div class="wrap">
+  <form class="card" id="kanteiForm">
+
+    <!-- STEP 1 -->
+    <div class="step-panel active" data-step="1">
+      <div class="step-title"><span class="num">1</span>基本情報・ご相談内容</div>
+      <div class="grid2">
+        <div class="field">
+          <label>お名前<span class="req">必須</span></label>
+          <input type="text" name="name" required placeholder="例）田中 花子">
+        </div>
+        <div class="field">
+          <label>フリガナ<span class="opt">任意</span></label>
+          <input type="text" name="name_kana" placeholder="例）タナカ ハナコ">
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label>生年月日<span class="req">必須</span></label>
+          <input type="date" name="birthdate" required>
+          <div class="hint">八宅法・奇門遁甲の判定に使用します</div>
+        </div>
+        <div class="field">
+          <label>性別<span class="opt">任意</span></label>
+          <div class="radio-row" style="margin-top:10px;">
+            <label><input type="radio" name="gender" value="女性">女性</label>
+            <label><input type="radio" name="gender" value="男性">男性</label>
+            <label><input type="radio" name="gender" value="回答しない">回答しない</label>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>メールアドレス<span class="req">必須</span></label>
+        <input type="email" name="email" required placeholder="鑑定書のお届け先になります">
+      </div>
+      <div class="field">
+        <label>ご相談内容（複数選択可）<span class="opt">任意</span></label>
+        <div class="chip-group" data-group="concerns">
+          <label class="chip"><input type="checkbox" value="仕事運">仕事運</label>
+          <label class="chip"><input type="checkbox" value="金運">金運</label>
+          <label class="chip"><input type="checkbox" value="健康運">健康運</label>
+          <label class="chip"><input type="checkbox" value="人間関係運">人間関係運</label>
+          <label class="chip"><input type="checkbox" value="恋愛・結婚運">恋愛・結婚運</label>
+          <label class="chip"><input type="checkbox" value="家族運">家族運</label>
+          <label class="chip"><input type="checkbox" value="その他">その他</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>現在気になっていること・お悩み<span class="opt">任意</span></label>
+        <textarea name="concern_freetext" placeholder="例）最近仕事でミスが続いている、家族との会話が減った気がする、など"></textarea>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-panel" data-step="2">
+      <div class="step-title"><span class="num">2</span>住まいの基本情報</div>
+      <div class="field">
+        <label>建物の種別<span class="req">必須</span></label>
+        <div class="radio-row">
+          <label><input type="radio" name="building_type" value="マンション" required>マンション</label>
+          <label><input type="radio" name="building_type" value="戸建て">戸建て</label>
+          <label><input type="radio" name="building_type" value="その他">その他</label>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label>都道府県<span class="req">必須</span></label>
+          <select name="prefecture" required>
+            <option value="">選択してください</option>
+            <option>北海道</option><option>青森県</option><option>岩手県</option><option>宮城県</option><option>秋田県</option><option>山形県</option><option>福島県</option>
+            <option>茨城県</option><option>栃木県</option><option>群馬県</option><option>埼玉県</option><option>千葉県</option><option>東京都</option><option>神奈川県</option>
+            <option>新潟県</option><option>富山県</option><option>石川県</option><option>福井県</option><option>山梨県</option><option>長野県</option>
+            <option>岐阜県</option><option>静岡県</option><option>愛知県</option><option>三重県</option>
+            <option>滋賀県</option><option>京都府</option><option>大阪府</option><option>兵庫県</option><option>奈良県</option><option>和歌山県</option>
+            <option>鳥取県</option><option>島根県</option><option>岡山県</option><option>広島県</option><option>山口県</option>
+            <option>徳島県</option><option>香川県</option><option>愛媛県</option><option>高知県</option>
+            <option>福岡県</option><option>佐賀県</option><option>長崎県</option><option>熊本県</option><option>大分県</option><option>宮崎県</option><option>鹿児島県</option><option>沖縄県</option>
+          </select>
+          <div class="hint">磁北と真北のずれ（偏角）は都道府県ごとに異なるため、方位の補正計算に使用します</div>
+        </div>
+        <div class="field">
+          <label>郵便番号<span class="opt">任意</span></label>
+          <input type="text" name="postal_code" placeholder="123-4567">
+        </div>
+      </div>
+      <div class="field">
+        <label>市区町村<span class="opt">任意</span></label>
+        <input type="text" name="city" placeholder="例）横浜市〇〇区">
+        <div class="hint">プライバシー保護のため、詳細な番地までは不要です</div>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label>築年数<span class="opt">任意</span></label>
+          <select name="building_age">
+            <option value="">選択してください</option>
+            <option>新築〜5年</option>
+            <option>6〜10年</option>
+            <option>11〜20年</option>
+            <option>21〜30年</option>
+            <option>31年以上</option>
+            <option>不明</option>
+          </select>
+        </div>
+        <div class="field" id="floorField">
+          <label>階数／号室<span class="opt">任意・マンションの場合</span></label>
+          <input type="text" name="floor_room" placeholder="例）7階 705号室">
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label>入居年月日（予定でも可）<span class="opt">任意</span></label>
+          <input type="date" name="move_in_date">
+        </div>
+        <div class="field">
+          <label>間取りタイプ<span class="req">必須</span></label>
+          <select name="floor_plan_type" required>
+            <option value="">選択してください</option>
+            <option>1K・1DK</option>
+            <option>1LDK</option>
+            <option>2K・2DK</option>
+            <option>2LDK</option>
+            <option>3LDK</option>
+            <option>4LDK以上</option>
+            <option>その他</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-panel" data-step="3">
+      <div class="step-title"><span class="num">3</span>方位情報</div>
+      <div class="callout">
+        方位は間取り図に記載の方角（真北基準）を選んでいただいて構いません。磁北とのずれは、お住まいの地点をもとに自動補正いたします（都道府県だけでも補正できますが、市区町村までわかるとさらに精度が上がります）。スマートフォンのコンパスアプリで直接計測された方は、下の「方位の確認方法」で選択してください。
+      </div>
+
+      <div class="field">
+        <label>方位の確認方法<span class="req">必須</span></label>
+        <div class="radio-row">
+          <label><input type="radio" name="direction_source" value="floor_plan" checked required>間取り図・登記図に記載の方角を見た</label>
+          <label><input type="radio" name="direction_source" value="compass">スマホのコンパスアプリ等で直接計測した</label>
+        </div>
+        <div class="hint">間取り図の方角は「真北」基準、実測コンパスは「磁北」基準であることが多く、鑑定の精度に影響するため確認しています</div>
+      </div>
+
+      <div class="field">
+        <label>玄関ドアが外を向いている方角<span class="req">必須</span></label>
+        <div class="hint" style="margin-top:-2px;margin-bottom:8px;">玄関ドアを開けて外に出るときに、体が向く方角です。玄関が家のどの位置にあるか（下の項目）とは異なります。例：家の西側の壁に玄関があっても、ドアが南向きに開く場合は「南」を選びます。</div>
+        <div class="compass" data-group="entrance_facing_dir" data-single="true">
+          <label class="chip"><input type="radio" name="entrance_facing_dir" value="北">北</label>
+          <label class="chip"><input type="radio" name="entrance_facing_dir" value="北東">北東</label>
+          <label class="chip"><input type="radio" name="entrance_facing_dir" value="東">東</label>
+          <label class="chip"><input type="radio" name="entrance_facing_dir" value="南東">南東</label>
+          <label class="chip"><input type="radio" name="entrance_facing_dir" value="南">南</label>
+          <label class="chip"><input type="radio" name="entrance_facing_dir" value="南西">南西</label>
+          <label class="chip"><input type="radio" name="entrance_facing_dir" value="西">西</label>
+          <label class="chip"><input type="radio" name="entrance_facing_dir" value="北西">北西</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>玄関の位置（家の中心から見た方角）<span class="req">必須</span></label>
+        <div class="compass" data-group="entrance_dir" data-single="true">
+          <label class="chip"><input type="radio" name="entrance_dir" value="北">北</label>
+          <label class="chip"><input type="radio" name="entrance_dir" value="北東">北東</label>
+          <label class="chip"><input type="radio" name="entrance_dir" value="東">東</label>
+          <label class="chip"><input type="radio" name="entrance_dir" value="南東">南東</label>
+          <label class="chip"><input type="radio" name="entrance_dir" value="南">南</label>
+          <label class="chip"><input type="radio" name="entrance_dir" value="南西">南西</label>
+          <label class="chip"><input type="radio" name="entrance_dir" value="西">西</label>
+          <label class="chip"><input type="radio" name="entrance_dir" value="北西">北西</label>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="field">
+          <label>リビング・ダイニングの方角<span class="opt">任意</span></label>
+          <select name="living_dir"><option value="">選択</option><option>北</option><option>北東</option><option>東</option><option>南東</option><option>南</option><option>南西</option><option>西</option><option>北西</option><option value="中央">中央（家の真ん中にある）</option></select>
+        </div>
+        <div class="field">
+          <label>主寝室の方角<span class="opt">任意</span></label>
+          <select name="bedroom_dir"><option value="">選択</option><option>北</option><option>北東</option><option>東</option><option>南東</option><option>南</option><option>南西</option><option>西</option><option>北西</option><option value="中央">中央（家の真ん中にある）</option></select>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label>キッチンの方角<span class="opt">任意</span></label>
+          <select name="kitchen_dir"><option value="">選択</option><option>北</option><option>北東</option><option>東</option><option>南東</option><option>南</option><option>南西</option><option>西</option><option>北西</option><option value="中央">中央（家の真ん中にある）</option></select>
+        </div>
+        <div class="field">
+          <label>浴室・トイレ・洗面台の方角<span class="opt">任意</span></label>
+          <select name="bathroom_dir"><option value="">選択</option><option>北</option><option>北東</option><option>東</option><option>南東</option><option>南</option><option>南西</option><option>西</option><option>北西</option><option value="中央">中央（家の真ん中にある）</option></select>
+          <div class="hint">浴室・トイレ・洗面台が家の中心付近にある間取りの場合は「中央」をお選びください</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-panel" data-step="4">
+      <div class="step-title"><span class="num">4</span>図面・お写真のアップロード</div>
+      <div class="step-desc">現地に伺えない分、お写真から室内の状態を拝見します。写っている範囲で構いません。</div>
+
+      <div class="field">
+        <label>間取り図<span class="opt">任意・あれば精度が上がります</span></label>
+        <label class="upload-box" data-target="floorplan_file">
+          <input type="file" name="floorplan_file" accept="image/*,.pdf">
+          <div class="upload-label">クリックして画像またはPDFを選択</div>
+        </label>
+      </div>
+      <div class="field">
+        <label>玄関のお写真<span class="opt">任意</span></label>
+        <label class="upload-box" data-target="entrance_photo">
+          <input type="file" name="entrance_photo" accept="image/*">
+          <div class="upload-label">クリックして画像を選択</div>
+        </label>
+      </div>
+      <div class="field">
+        <label>リビングのお写真<span class="opt">任意</span></label>
+        <label class="upload-box" data-target="living_photo">
+          <input type="file" name="living_photo" accept="image/*">
+          <div class="upload-label">クリックして画像を選択</div>
+        </label>
+      </div>
+      <div class="field">
+        <label>寝室のお写真<span class="opt">任意</span></label>
+        <label class="upload-box" data-target="bedroom_photo">
+          <input type="file" name="bedroom_photo" accept="image/*">
+          <div class="upload-label">クリックして画像を選択</div>
+        </label>
+      </div>
+      <div class="field">
+        <label>その他気になる場所のお写真<span class="opt">任意・複数可</span></label>
+        <label class="upload-box" data-target="other_photos">
+          <input type="file" name="other_photos" accept="image/*" multiple>
+          <div class="upload-label">クリックして画像を選択（複数可）</div>
+        </label>
+      </div>
+      <div class="field">
+        <label>写真についての備考<span class="opt">任意</span></label>
+        <textarea name="photo_note" placeholder="例）2枚目は窓から見える隣家です、など"></textarea>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-panel" data-step="5">
+      <div class="step-title"><span class="num">5</span>ご家族構成</div>
+      <div class="step-desc">ご家族分の八宅法（吉凶方位）も合わせて見る場合にご入力ください。任意項目です。</div>
+      <div class="field">
+        <label>同居人数<span class="opt">任意・ご本人を含む</span></label>
+        <input type="number" name="household_size" min="1" max="10" placeholder="例）3">
+      </div>
+      <div class="field">
+        <label>ご家族の続柄・生年月日<span class="opt">任意</span></label>
+        <div id="familyList"></div>
+        <button type="button" class="add-btn" id="addFamilyBtn">＋ ご家族を追加する</button>
+      </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step-panel" data-step="6">
+      <div class="step-title"><span class="num">6</span>鑑定のタイミングについて</div>
+      <div class="step-desc">奇門遁甲による吉日のご案内をご希望の場合にご入力ください。任意項目です。</div>
+      <div class="field">
+        <label>占ってほしい特定の日取りがあれば<span class="opt">任意</span></label>
+        <input type="text" name="timing_event" placeholder="例）引っ越し予定日、契約更新日、開業日など">
+      </div>
+      <div class="field">
+        <label>該当する日付<span class="opt">任意</span></label>
+        <input type="date" name="timing_date">
+      </div>
+      <div class="field">
+        <label>その他ご要望・伝えておきたいこと<span class="opt">任意</span></label>
+        <textarea name="other_requests" placeholder="鑑定士へのメッセージがあればご記入ください"></textarea>
+      </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step-panel" data-step="7">
+      <div class="step-title"><span class="num">7</span>ご入力内容の確認</div>
+      <div id="summaryArea"></div>
+      <div class="consent">
+        <input type="checkbox" id="consentCheck" required>
+        <label for="consentCheck">ご入力いただいた情報は鑑定目的にのみ使用します。プライバシーポリシーに同意の上、送信します。</label>
+      </div>
+    </div>
+
+    <!-- 完了画面 -->
+    <div class="step-panel" data-step="done">
+      <div class="done-screen">
+        <div class="mincho">ご入力ありがとうございました</div>
+        <p>鑑定書は数日以内にご登録のメールアドレスへお届けいたします。<br>今しばらくお待ちくださいませ。</p>
+      </div>
+    </div>
+
+    <div class="nav-row" id="navRow">
+      <button type="button" class="nav-btn" id="backBtn">戻る</button>
+      <button type="button" class="nav-btn primary" id="nextBtn">次へ進む</button>
+    </div>
+  </form>
+</div>
+
+<script>
+const steps = [1,2,3,4,5,6,7];
+const stepLabels = {1:"基本情報",2:"住まい",3:"方位",4:"写真",5:"ご家族",6:"タイミング",7:"確認"};
+let current = 1;
+let familyCount = 0;
+
+const stepperEl = document.getElementById('stepper');
+function renderStepper(){
+  stepperEl.innerHTML = steps.map(s => {
+    const cls = s === current ? 'active' : (s < current ? 'done' : '');
+    return `<div class="step-dot ${cls}" data-jump="${s}"><span class="num">${s}</span>${stepLabels[s]}</div>`;
+  }).join('');
+  stepperEl.querySelectorAll('.step-dot').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const target = parseInt(el.dataset.jump);
+      if(target < current){ goToStep(target); }
+    });
+  });
+}
+
+function goToStep(n){
+  document.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
+  const panel = document.querySelector(`.step-panel[data-step="${n}"]`);
+  if(panel) panel.classList.add('active');
+  current = n;
+  renderStepper();
+  document.getElementById('backBtn').style.visibility = (n === 1) ? 'hidden' : 'visible';
+  document.getElementById('nextBtn').textContent = (n === 7) ? '送信する' : '次へ進む';
+  if(n === 'done'){ document.getElementById('navRow').style.display = 'none'; }
+  if(n === 7){ buildSummary(); }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// チップ選択（複数選択 / 単一選択）
+document.querySelectorAll('.chip-group, .compass').forEach(group=>{
+  group.addEventListener('click', (e)=>{
+    const chip = e.target.closest('.chip');
+    if(!chip) return;
+    const input = chip.querySelector('input');
+    if(input.type === 'checkbox'){
+      input.checked = !input.checked;
+      chip.classList.toggle('selected', input.checked);
+    } else if(input.type === 'radio'){
+      group.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+      input.checked = true;
+      chip.classList.add('selected');
+    }
+  });
+});
+
+// ファイルアップロード表示
+document.querySelectorAll('.upload-box').forEach(box=>{
+  const input = box.querySelector('input[type=file]');
+  input.addEventListener('change', ()=>{
+    const label = box.querySelector('.upload-label');
+    if(input.files.length){
+      box.classList.add('has-file');
+      label.textContent = input.files.length > 1 ? `${input.files.length}件のファイルを選択済み` : input.files[0].name;
+    }
+  });
+});
+
+// 家族追加
+function addFamilyRow(){
+  familyCount++;
+  const id = familyCount;
+  const div = document.createElement('div');
+  div.className = 'family-item';
+  div.dataset.id = id;
+  div.innerHTML = `
+    <input type="text" placeholder="続柄（例：配偶者）" name="family_relation_${id}">
+    <input type="date" name="family_birthdate_${id}">
+    <button type="button" class="remove-btn" data-remove="${id}">削除</button>
+  `;
+  document.getElementById('familyList').appendChild(div);
+  div.querySelector('.remove-btn').addEventListener('click', ()=> div.remove());
+}
+document.getElementById('addFamilyBtn').addEventListener('click', addFamilyRow);
+
+// バリデーション（必須項目チェック、現在のステップのみ）
+function validateStep(n){
+  const panel = document.querySelector(`.step-panel[data-step="${n}"]`);
+  if(!panel) return true;
+  const requiredInputs = panel.querySelectorAll('[required]');
+  for(const inp of requiredInputs){
+    if(inp.type === 'radio'){
+      const group = panel.querySelectorAll(`input[name="${inp.name}"]`);
+      const anyChecked = Array.from(group).some(r=>r.checked);
+      if(!anyChecked){ alert('必須項目にご入力・ご選択ください。'); return false; }
+    } else if(inp.type === 'checkbox'){
+      if(!inp.checked){ alert('内容をご確認の上、チェックを入れてください。'); return false; }
+    } else if(!inp.value){
+      alert('必須項目にご入力ください。');
+      inp.focus();
+      return false;
+    }
+  }
+  return true;
+}
+
+function buildSummary(){
+  const form = document.getElementById('kanteiForm');
+  const fd = new FormData(form);
+  const get = (name) => fd.get(name) || '未入力';
+  const concerns = fd.getAll('concerns') ;
+  const checkedConcerns = Array.from(document.querySelectorAll('[data-group="concerns"] input:checked')).map(i=>i.value).join('、') || '未選択';
+
+  const area = document.getElementById('summaryArea');
+  area.innerHTML = `
+    <div class="summary-block">
+      <h4>基本情報</h4>
+      <div class="summary-row"><div class="k">お名前</div><div class="v">${get('name')}</div></div>
+      <div class="summary-row"><div class="k">生年月日</div><div class="v">${get('birthdate')}</div></div>
+      <div class="summary-row"><div class="k">メール</div><div class="v">${get('email')}</div></div>
+      <div class="summary-row"><div class="k">ご相談内容</div><div class="v">${checkedConcerns}</div></div>
+    </div>
+    <div class="summary-block">
+      <h4>住まい</h4>
+      <div class="summary-row"><div class="k">建物種別</div><div class="v">${get('building_type')}</div></div>
+      <div class="summary-row"><div class="k">都道府県</div><div class="v">${get('prefecture')}</div></div>
+      <div class="summary-row"><div class="k">地域</div><div class="v">${get('city')}</div></div>
+      <div class="summary-row"><div class="k">間取り</div><div class="v">${get('floor_plan_type')}</div></div>
+    </div>
+    <div class="summary-block">
+      <h4>方位</h4>
+      <div class="summary-row"><div class="k">方位の確認方法</div><div class="v">${get('direction_source')==='compass' ? 'コンパス実測（磁北）' : '間取り図記載（真北）'}</div></div>
+      <div class="summary-row"><div class="k">玄関ドアの向き</div><div class="v">${get('entrance_facing_dir')}</div></div>
+      <div class="summary-row"><div class="k">玄関の位置</div><div class="v">${get('entrance_dir')}</div></div>
+    </div>
+    <div class="callout" style="margin-top:10px;">送信後、内容の修正はメールにてお問い合わせください。</div>
+  `;
+}
+
+document.getElementById('nextBtn').addEventListener('click', ()=>{
+  if(!validateStep(current)) return;
+  if(current === 7){
+    // ここで実際の送信処理（バックエンドAPIへのPOSTなど）を行う。
+    // 例: fetch('/api/kantei-typeA', { method:'POST', body: new FormData(form) })
+    goToStep('done');
+  } else {
+    goToStep(current + 1);
+  }
+});
+document.getElementById('backBtn').addEventListener('click', ()=>{
+  if(current > 1) goToStep(current - 1);
+});
+
+renderStepper();
+addFamilyRow();
+</script>
+
+</body>
+</html>
